@@ -1,17 +1,23 @@
-name: Super-Linter
+name: CI/CD Simple Example
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  super-lint:
-    name: Lint code base
+  build-test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout kode
         uses: actions/checkout@v2
 
-      - name: Run Super-Linter
-        uses: github/super-linter@v4
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker Image
+        run: docker build -t simple-app .
+
+      - name: Jalankan Container
+        run: docker run simple-app
